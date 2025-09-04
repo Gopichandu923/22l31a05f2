@@ -11,7 +11,7 @@ const UrlStatistics = ({ shortCode }) => {
     const fetchStats = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/statistics/${shortCode}`
+          `http://localhost:3000/urlshortner/${shortCode}`
         );
         if (!res.ok) throw new Error("Failed to fetch stats");
         const data = await res.json();

@@ -35,7 +35,7 @@ const UrlShortner = () => {
 
       // Make parallel requests for each URL
       const promises = validUrls.map((url) =>
-        fetch("http://localhost:3000/api/shorten", {
+        fetch("http://localhost:3000/urlshortner", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ url }),

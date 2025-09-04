@@ -5,10 +5,17 @@ const UrlShortnerSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true, // index for fast search
   },
   url: {
     type: String,
     required: true,
+    validate: {
+      validator: function (v) {
+        return /^https?:\/\/.+/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid URL!`,
+    },
   },
   openCount: {
     type: Number,
@@ -16,7 +23,7 @@ const UrlShortnerSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: () => new Date(),
   },
   expiry: {
     type: Date,
@@ -25,6 +32,7 @@ const UrlShortnerSchema = new mongoose.Schema({
   validity: {
     type: Number,
     required: true,
+    min: [1, "Validity must be at least 1 day"],
   },
 });
 

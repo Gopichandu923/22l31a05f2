@@ -63,10 +63,33 @@ const getUrl = async (req, res) => {
     }
 
     // Increment openCount
-    urlEntry.openCount += 1;
+    urlEntry.openCount = (urlEntry.openCount || 0) + 1;
     await urlEntry.save();
 
-    res.redirect(urlEntry.url);
+    // Get visitor info
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",").shift() ||
+      req.connection.remoteAddress;
+    const userAgent = req.headers["user-agent"] || "";
+    const referrer = req.headers["referer"] || "";
+
+    // Get geo info from IP
+    const geo = geoip.lookup(ip) || {};
+    const country = geo.country || "";
+    const city = geo.city || "";
+
+    // Save visit
+    const visit = new Visit({
+      shortCode: id,
+      ip,
+      userAgent,
+      referrer,
+      country,
+      city,
+    });
+    await visit.save();
+
+    res.status(200).json(urlEntry.);
   } catch (err) {
     console.error("Error retrieving URL:", err);
     res.status(500).json({ message: "Server error while retrieving URL" });

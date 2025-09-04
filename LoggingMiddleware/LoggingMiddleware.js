@@ -5,7 +5,7 @@ async function Log(stack, level, package, message) {
   const url = "http://20.244.56.144/evaluation-service/logs";
 
   const res = await axios.post(url, {
-    stack: stack.lower(),
+    stack: stack.toLowerCase(),
     level: level,
     package: package,
     message: message,

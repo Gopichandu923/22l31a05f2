@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import UrlShortner from "./Pages/UrlShortner.jsx";
+import UrlStatistics from "./Pages/UrlStatistics.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+const HomePage = () => {
+  const [view, setView] = useState("shortner"); // 'shortner' or 'statistics'
+  const [shortCode, setShortCode] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div style={{ maxWidth: 800, margin: "auto", padding: 20 }}>
+      <h1>URL Shortener Service</h1>
 
-export default App
+      <nav style={{ marginBottom: 20 }}>
+        <button
+          onClick={() => setView("shortner")}
+          style={{
+            marginRight: 10,
+            padding: "8px 16px",
+            backgroundColor: view === "shortner" ? "#007BFF" : "#ccc",
+            color: view === "shortner" ? "white" : "black",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Shorten URLs
+        </button>
+
+        <button
+          onClick={() => setView("statistics")}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: view === "statistics" ? "#007BFF" : "#ccc",
+            color: view === "statistics" ? "white" : "black",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          View Statistics
+        </button>
+      </nav>
+
+      {view === "shortner" && <UrlShortner />}
+
+      {view === "statistics" && (
+        <div>
+          <div style={{ marginBottom: 10 }}>
+            <input
+              type="text"
+              placeholder="Enter shortcode to view stats"
+              value={shortCode}
+              onChange={(e) => setShortCode(e.target.value.trim())}
+              style={{ padding: 8, width: "300px", marginRight: 10 }}
+            />
+            <button
+              onClick={() => {
+                if (!shortCode) alert("Please enter a shortcode");
+              }}
+              style={{ padding: "8px 16px" }}
+            >
+              Show Stats
+            </button>
+          </div>
+
+          {/* Render stats only if shortcode is entered */}
+          {shortCode && <UrlStatistics shortCode={shortCode} />}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default HomePage;
